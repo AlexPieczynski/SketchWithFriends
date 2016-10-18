@@ -21,8 +21,8 @@ enum Direction
 
 void setup()
 {
-  pinMode(STICKX, OUTPUT);
-  pinMode(STICKY, OUTPUT);
+  pinMode(STICKX, INPUT);
+  pinMode(STICKY, INPUT);
   Serial.begin(9600);
   Wire.begin(SLAVE_ADDR);
 }
