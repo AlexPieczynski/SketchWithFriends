@@ -40,9 +40,9 @@ Direction getDirection(byte x, byte y)
  */
 void requestEvent()
 {
-  byte x = map(analogRead(STICKX), 0, 1023, 0, 3);
+  byte x = map(analogRead(STICKX), 0, 1023, 0, 2);
   delay(1); // delay needed in between two analog reads, see https://www.arduino.cc/en/Tutorial/JoyStick
-  byte y = map(analogRead(STICKY), 0, 1023, 0, 3);
+  byte y = map(analogRead(STICKY), 0, 1023, 0, 2);
   Serial.print("X: ");
   Serial.println(x);
   Serial.print("Y: ");
@@ -52,7 +52,44 @@ void requestEvent()
   Wire.write(dir);
 }
 
+// custom mapping
+int cMap(int rawVal) {
+  if (rawVal < 400) {
+    return 0;
+  } else if (rawVal < 600) {
+    return 1;
+  } else {
+    return 2;
+  }
+}
+
+// TODO: think of something more clever for this
+int getDir (int x, int y) {
+  if (x == 1 && y == 1) {
+    return none;
+  } else if (x == 1 && y == 2) {
+    return north;
+  } else if (x == 2 && y == 2) {
+    return neast;
+  } else if (x == 2 && y == 1) {
+    return east;
+  } else if (x == 2 && y == 0) {
+    return seast;
+  } else if (x == 1 && y == 0) {
+    return south;
+  } else if (x == 0 && y == 0) {
+    return swest;
+  } else if (x == 0 && y == 1) {
+    return west;
+  } else if (x == 0 && y == 2) {
+    return nwest;
+  }
+}
+
 void loop()
 {
+  int x = cMap(analogRead(STICKX));
+  int y = cMap(analogRead(STICKY));
+  Serial.println(getDir(x, y));
   delay(100); // idk, saw it here https://www.arduino.cc/en/Tutorial/MasterReader
 }
