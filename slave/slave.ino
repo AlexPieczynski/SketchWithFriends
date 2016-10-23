@@ -9,16 +9,12 @@
  */
 
 #include <Wire.h>
+#include "sketchwithfriends.h"
 
 #define STICKX 1
 #define STICKY 2
 #define INTERRUPT_CLICK 2 // interrupt can use digital pins 2 or 3
 #define SLAVE_ADDR 8 // these will probably need to be different for each slave
-
-enum Direction
-{
-  north, neast, east, seast, south, swest, west, nwest, none
-};
 
 void setup()
 {

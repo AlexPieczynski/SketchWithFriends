@@ -5,25 +5,16 @@
  *  -draw to an LCD screen using this input
  *  
  *  Created by Alex Pieczynski, Ryan Fogarty, and Diego Vega
- *  
- *  TODO - shift Direction enum to slave side, convert to Direction there. Then send 1 byte of direction.
  */
 
 #include <Wire.h>
-
-#define USR1 1
-#define USR2 2
+#include "sketchwithfriends.h"
 
 void setup()
 {
   Wire.begin();
   Serial.begin(9600);
 }
-
-enum Direction
-{
-  north, neast, east, seast, south, swest, west, nwest
-};
 
 int cursor1x = 0;
 int cursor1y = 0;
