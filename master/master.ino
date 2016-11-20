@@ -44,16 +44,20 @@ uint16_t COLOR2 = RED;
 void loop()
 {
   // get two bytes from device 0. We must standardize the device addresses somewhere.
-  Wire.requestFrom(0, SLAVE1);
+  Wire.requestFrom(8, 2);
+  while (Wire.available() < 2){};
   Direction dir1 = Wire.read();
+  Serial.print("SLAVE1: ");
+  Serial.println(dir1);
 
-  Wire.requestFrom(1, SLAVE2);
-  Direction dir2 = Wire.read();
+//  Wire.requestFrom(SLAVE2, 2);
+//  Direction dir2 = Wire.read();
+//  Serial.println("SLAVE2: " + dir2);
 
   // CHANGE CURSOR POSITIONS HERE
 
   // draw rectangle at the new cursor position
   tft.fillRect(cursor1x, cursor1y, BRUSH1, BRUSH1, COLOR1);
-  tft.fillRect(cursor2x, cursor2y, BRUSH2, BRUSH2, COLOR2);
-  delay(5000);
+//  tft.fillRect(cursor2x, cursor2y, BRUSH2, BRUSH2, COLOR2);
+  delay(500);
 }
