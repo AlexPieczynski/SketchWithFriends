@@ -3,6 +3,11 @@
 #define SLAVE1 1
 #define SLAVE2 2
 
+typedef struct point_struct {
+  int x;
+  int y;
+} Point;
+
 // The control pins for the LCD can be assigned to any digital or
 // analog pins...but we'll use the analog pins as this allows us to
 // double up the pins with the touch screen (see the TFT paint example).
