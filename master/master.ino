@@ -11,10 +11,16 @@
 #include <Adafruit_TFTLCD.h>
 #include "sketchwithfriends.h"
 
-// If using the shield, all control and data lines are fixed, and
-// a simpler declaration can optionally be used:
-// Adafruit_TFTLCD tft;
 Adafruit_TFTLCD tft(LCD_CS, LCD_CD, LCD_WR, LCD_RD, LCD_RESET);
+
+// brush colors
+uint16_t COLOR1 = BLUE;
+uint16_t COLOR2 = RED;
+int16_t BGCOLOR = BLACK;
+
+// brush sizes
+int16_t BRUSH1 = 10;
+int16_t BRUSH2 = 10;
 
 Point cursor1;
 Point cursor2;
@@ -25,18 +31,18 @@ void setup()
   Wire.begin();
   tft.reset();
   tft.begin(tft.readID());
+  tft.fillScreen(BGCOLOR);
+  tft.setRotation(1);
 
   // center cursors on opposite sides
-  cursor1.x = 106;
-  cursor1.y = 120;
-  cursor2.x = 213;
-  cursor2.y = 120;
+  cursor1.x = tft.width()/3;
+  cursor1.y = tft.height()/2;
+  cursor2.x = (tft.width()/3)*2;
+  cursor2.y = tft.height()/2;
 }
 
-void updateCursor(Point* p, Direction dir)
-{
-  switch(dir)
-  {
+void updateCursor(Point* p, Direction dir) {
+  switch(dir){
     case north:
       p->y++;
       break;
@@ -69,61 +75,41 @@ void updateCursor(Point* p, Direction dir)
 
   if (p->x < 0)
     p->x = 0;
-  else if (p->x > S_WIDTH)
-    p-> x = S_WIDTH;
+  else if (p->x > tft.width())
+    p-> x = tft.width();
 
   if (p->y < 0)
     p->y = 0;
-  else if (p->y > S_HEIGHT)
-    p->y = S_HEIGHT;
+  else if (p->y > tft.height())
+    p->y = tft.height();
 }
 
-// brush sizes
-// TODO - define some way of changing brush size.
-//        Probably using buttons on the slave side.
-int16_t BRUSH1 = 3;
-int16_t BRUSH2 = 3;
-
-// brush colors
-// TODO - perhaps allow user to change color?
-uint16_t COLOR1 = BLUE;
-uint16_t COLOR2 = RED;
 
 void loop()
 {
-  Serial.print("1. x: ");
-  Serial.print(cursor1.x);
-  Serial.print("  y: ");
-  Serial.println(cursor1.y);
-  updateCursor(&cursor1, north);
-  Serial.print("1. x: ");
-  Serial.print(cursor1.x);
-  Serial.print("  y: ");
-  Serial.println(cursor1.y);
-  
-  
-  // get two bytes from device 8. We must standardize the device addresses somewhere.
-  Wire.requestFrom(8, 2);
-  while (Wire.available() < 2){};
+  // get dir from SLAVE1
+  Wire.requestFrom(SLAVE1, 2);
+  while (Wire.available() < 2){}
   Direction dir1 = Wire.read();
-  Serial.print("SLAVE1: ");
-  Serial.println(dir1);
+  Wire.read();
 
-//  Wire.requestFrom(SLAVE2, 2);
-//  Direction dir2 = Wire.read();
-//  Serial.println("SLAVE2: " + dir2);
-
-  if (dir1 != none)
+  // draw new point or clear screen
+  if (dir1 != none && dir1 != clearPoints) {
     updateCursor(&cursor1, dir1);
-  else {                            // undo request
-    // UNDO HERE
+    tft.fillRect(cursor1.x, cursor1.y, BRUSH2, BRUSH2, COLOR1);
   }
+  else if (dir1 == 9)
+    tft.fillScreen(BGCOLOR);
   
-//  updateCursor(&cursor2, dir2);
-    
-
-  // draw rectangle at the new cursor position
-  tft.fillRect(cursor1.x, cursor1.y, BRUSH1, BRUSH1, COLOR1);
-//  tft.fillRect(cursor2.x, cursor2.y, BRUSH2, BRUSH2, COLOR2);
-  delay(500);
+  Wire.requestFrom(9, 2);
+  while (Wire.available() < 2){}
+  Direction dir2 = Wire.read();
+  Wire.read();
+  
+  if (dir2 != none && dir2 != clearPoints) {
+    updateCursor(&cursor2, dir2);
+    tft.fillRect(cursor2.x, cursor2.y, BRUSH2, BRUSH2, COLOR2);
+  }
+  else if (dir2 == clearPoints)
+    tft.fillScreen(BGCOLOR);
 }

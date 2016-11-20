@@ -1,7 +1,6 @@
 // addresses of each arduino
-#define MASTER 0
-#define SLAVE1 1
-#define SLAVE2 2
+#define SLAVE1 8
+#define SLAVE2 9
 
 // The control pins for the LCD can be assigned to any digital or
 // analog pins...but we'll use the analog pins as this allows us to
