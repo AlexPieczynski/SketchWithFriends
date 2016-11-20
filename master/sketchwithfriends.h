@@ -27,17 +27,7 @@ typedef struct {
   int y;
 } Point;
 
-typedef struct node_struct {
-  Point point;
-	struct node_struct* next;
-} Node;
-
-typedef struct list_struct {
-	int length;
-	Node* head;
-} List;
-
 enum Direction
 {
-  north, neast, east, seast, south, swest, west, nwest, none
+  north, neast, east, seast, south, swest, west, nwest, none, clearPoints
 };
