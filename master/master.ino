@@ -33,7 +33,7 @@ void setup()
   cursor2.y = 120;
 }
 
-void updateCursors(Point* p, Direction dir)
+void updateCursor(Point* p, Direction dir)
 {
   switch(dir)
   {
