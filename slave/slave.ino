@@ -9,12 +9,16 @@
  */
 
 #include <Wire.h>
-#include "sketchwithfriends.h"
 
 #define STICKX 1
 #define STICKY 2
 #define INTERRUPT_CLICK 2 // interrupt can use digital pins 2 or 3
 #define SLAVE_ADDR 8 // these will probably need to be different for each slave
+
+enum Direction
+{
+  north, neast, east, seast, south, swest, west, nwest, none
+};
 
 void setup()
 {
@@ -55,9 +59,9 @@ Direction getDirection(byte x, byte y)
  */
 void requestEvent()
 {
-  byte x = map(analogRead(STICKX), 0, 1023, 0, 2);
+  byte x = cMap(analogRead(STICKX));
   delay(1); // delay needed in between two analog reads, see https://www.arduino.cc/en/Tutorial/JoyStick
-  byte y = map(analogRead(STICKY), 0, 1023, 0, 2);
+  byte y = cMap(analogRead(STICKY));
   Serial.print("X: ");
   Serial.println(x);
   Serial.print("Y: ");
@@ -86,9 +90,9 @@ void joystickClicked()
 
 void loop()
 {
-  byte x = cMap(analogRead(STICKX));
-  byte y = cMap(analogRead(STICKY));
-  Direction dir = getDirection(x, y);
-  Serial.println(dir);
-  delay(100);
+//  byte x = cMap(analogRead(STICKX));
+//  byte y = cMap(analogRead(STICKY));
+//  Direction dir = getDirection(x, y);
+//  Serial.println(dir);
+//  delay(100);
 }
