@@ -27,6 +27,7 @@ void setup()
   pinMode(INTERRUPT_CLICK, INPUT_PULLUP);
   Serial.begin(9600);
   Wire.begin(SLAVE_ADDR);
+  Wire.onRequest(requestEvent);
   attachInterrupt(digitalPinToInterrupt(INTERRUPT_CLICK), joystickClicked, FALLING);
 }
 
@@ -94,5 +95,5 @@ void loop()
 //  byte y = cMap(analogRead(STICKY));
 //  Direction dir = getDirection(x, y);
 //  Serial.println(dir);
-//  delay(100);
+  delay(100);
 }
