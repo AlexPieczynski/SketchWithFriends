@@ -66,6 +66,16 @@ void updateCursor(Point* p, Direction dir)
       p->y++;
       break;
   }
+
+  if (p->x < 0)
+    p->x = 0;
+  else if (p->x > S_WIDTH)
+    p-> x = S_WIDTH;
+
+  if (p->y < 0)
+    p->y = 0;
+  else if (p->y > S_HEIGHT)
+    p->y = S_HEIGHT;
 }
 
 // brush sizes
@@ -81,6 +91,17 @@ uint16_t COLOR2 = RED;
 
 void loop()
 {
+  Serial.print("1. x: ");
+  Serial.print(cursor1.x);
+  Serial.print("  y: ");
+  Serial.println(cursor1.y);
+  updateCursor(&cursor1, north);
+  Serial.print("1. x: ");
+  Serial.print(cursor1.x);
+  Serial.print("  y: ");
+  Serial.println(cursor1.y);
+  
+  
   // get two bytes from device 8. We must standardize the device addresses somewhere.
   Wire.requestFrom(8, 2);
   while (Wire.available() < 2){};
