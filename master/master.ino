@@ -93,19 +93,21 @@ void loop()
   Direction dir1 = Wire.read();
   Wire.read();
 
-  // draw new point or clear screen
+  // draw point or clear screen
   if (dir1 != none && dir1 != clearPoints) {
     updateCursor(&cursor1, dir1);
     tft.fillRect(cursor1.x, cursor1.y, BRUSH2, BRUSH2, COLOR1);
   }
   else if (dir1 == 9)
     tft.fillScreen(BGCOLOR);
-  
-  Wire.requestFrom(9, 2);
+
+  // get dir from SLAVE2
+  Wire.requestFrom(SLAVE2, 2);
   while (Wire.available() < 2){}
   Direction dir2 = Wire.read();
   Wire.read();
   
+  // draw point or clear screen
   if (dir2 != none && dir2 != clearPoints) {
     updateCursor(&cursor2, dir2);
     tft.fillRect(cursor2.x, cursor2.y, BRUSH2, BRUSH2, COLOR2);
